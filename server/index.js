@@ -22,39 +22,32 @@ const namesAll = [
 
 app.get("/matches", async (req, res) => {
   try {
-    const preferences = preferenceManipulation();
-    const pairs = { pairs: stableRoommateProblem(preferences) };
-    //console.log(pairs.pairs[0][1]);
-    pairs.pairs.forEach((pair) => {
-      // *************************************** FIX ME *****************************************************
+    // Get names from db
+    const names = await pool.query("SELECT student_id, name FROM students");
+    const namesArr = names.rows;
 
-      const pairsName = pair.forEach((studentIdToFind) => {
-        console.log(studentIdToFind);
-        for (let i = 0; i < namesAll.length; i++) {
-          if (namesAll[i].student_id === studentIdToFind) {
-            studentName[0][i] = namesAll[i].name;
-            break;
-          }
-        }
-      });
-      console.log(pairsName);
+    // Get pairs from alg
+    const preferences = preferenceManipulation();
+    const pairs = stableRoommateProblem(preferences);
+
+    const pairName = pairs.map((pair) => {
+      const [studentId1, studentId2] = pair;
+      const name1 = namesArr.find(
+        (name) => name.student_id === parseInt(studentId1)
+      ).name;
+      const name2 = namesArr.find(
+        (name) => name.student_id === parseInt(studentId2)
+      ).name;
+      return [name1, name2];
     });
-    res.json(pairs);
+
+    console.log(pairName);
+
+    res.json({ pairName });
   } catch (error) {
-    res.json({ pairs: [] });
+    res.json({ pairName: [] });
   }
 });
-
-// app.get("/names", async (req, res) => {
-//   try {
-//     const names = await pool.query("SELECT student_id, name FROM students");
-//     const namesAll = names.rows;
-//     console.log(namesAll);
-//     res.json(namesAll);
-//   } catch (error) {
-//     console.error(error.message);
-//   }
-// });
 
 app.listen(5000, () => {
   console.log("server started on port 5000");
