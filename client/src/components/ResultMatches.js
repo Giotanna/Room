@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
-import "./resultMatches.css";
+import "./style/resultMatches.css";
+import Navbar from "./Navbar";
 
 const ResultMatches = () => {
   const [matches, setMatches] = useState([]);
