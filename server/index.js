@@ -11,15 +11,26 @@ app.use(express.json());
 
 // ROUTES
 
-const namesAll = [
-  { student_id: 1, name: "MARIA" },
-  { student_id: 2, name: "SOFIA" },
-  { student_id: 3, name: "KATERINA" },
-  { student_id: 4, name: "ARIS" },
-  { student_id: 5, name: "CHRIS" },
-  { student_id: 6, name: "STEFANOS" },
-];
+// LOGIN
 
+app.post("/login", async (req, res) => {
+  //const { email, password } = { email: "test@test.com", password: "Test!1234" };
+  const { email, password } = req.body;
+
+  try {
+    const user = await pool.query(
+      "SELECT * FROM students WHERE email = $1 AND password = $2",
+      [email, password]
+    );
+    console.log(email, password);
+    res.json(user.rows[0]);
+  } catch (error) {
+    res.json({});
+    console.log(error.message);
+  }
+});
+
+// GET MATCHES
 app.get("/matches", async (req, res) => {
   try {
     // Get names from db
