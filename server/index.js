@@ -14,19 +14,21 @@ app.use(express.json());
 // LOGIN
 
 app.post("/login", async (req, res) => {
-  //const { email, password } = { email: "test@test.com", password: "Test!1234" };
   const { email, password } = req.body;
-
+  //const { email, password } = { email: "test@test.com", password: "dre3" };
   try {
     const user = await pool.query(
       "SELECT * FROM students WHERE email = $1 AND password = $2",
       [email, password]
     );
-    console.log(email, password);
+    if (user.rows.length === 0) {
+      // No user found with the provided email and password
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
     res.json(user.rows[0]);
   } catch (error) {
-    res.json({});
     console.log(error.message);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
