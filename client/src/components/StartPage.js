@@ -1,10 +1,12 @@
 import React, { Fragment, useState } from "react";
+import PropTypes from 'prop-types';
 import Navbar from "./Navbar";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import "./style/startPage.css";
 
-const StartPage = () => {
+
+const StartPage = ({setToken}) => {
   const [activeForm, setActiveForm] = useState("login");
 
   const handleFormToggle = (formType) => {
@@ -31,11 +33,17 @@ const StartPage = () => {
           </button>
         </div>
         <div className="form-container">
-          {activeForm === "login" ? <LoginForm /> : <RegisterForm />}
+          {activeForm === "login" ? <LoginForm setToken={setToken} /> : <RegisterForm />}
         </div>
       </div>
     </Fragment>
   );
 };
 
+
+StartPage.propTypes = {
+  setToken: PropTypes.func.isRequired
+}
+
 export default StartPage;
+

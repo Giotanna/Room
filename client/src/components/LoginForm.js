@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from "react";
+import PropTypes from 'prop-types';
+import StartPage from "./StartPage";
 
-const LoginForm = () => {
+const LoginForm = ({setToken}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +33,8 @@ const LoginForm = () => {
 
       if (response.ok) {
         const jsonData = await response.json();
-        //setUserData(jsonData);                          **** keep data user logged in 
+        //setUserData(jsonData);  
+        setToken({"token":jsonData.student_id});                        
         console.log(jsonData);
 
       } else if (response.status === 401) {
@@ -50,6 +53,8 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     getUser(email, password);
+    // const token = getUser(email,password);
+    // setToken(token);
   };
 
   const handleForgotPassword = () => {
@@ -109,4 +114,10 @@ const LoginForm = () => {
   );
 };
 
+LoginForm.propTypes = {
+  setToken: PropTypes.func.isRequired
+}
+
 export default LoginForm;
+
+

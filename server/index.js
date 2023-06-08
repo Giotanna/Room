@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const router = express.Router()
 const cors = require("cors");
 const pool = require("./db");
 const stableRoommateProblem = require("./stable-roomate-problem");
@@ -8,6 +9,7 @@ const preferenceManipulation = require("./preferences_manipulation");
 //middleware
 app.use(cors());
 app.use(express.json());
+
 
 // ROUTES
 
@@ -26,6 +28,9 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
     res.json(user.rows[0]);
+    // res.send({
+    //   token: 'test123'
+    // });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ error: "Internal server error" });

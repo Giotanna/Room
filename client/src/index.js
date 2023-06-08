@@ -1,27 +1,18 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+//import { MemoryRouter } from "react-router-dom";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./index.css";
 import App from "./App";
-import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
-//import LoginForm from "./components/LoginForm";
-//import RegisterForm from "./components/RegisterForm";
 
-//import Root from "./routes/root.js";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  // {
-  //   path: "/login",
-  //   element: <LoginForm />,
-  // },
-  // {
-  //   path: "/register",
-  //   element: <RegisterForm />,
-  // },
-]);
+const rootElement = document.getElementById("root");
+const root = createRoot(rootElement);
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<RouterProvider router={router} />);
+root.render(
+  <StrictMode>
+    <Router basename={process.env.PUBLIC_URL}>
+      <App />
+    </Router>
+  </StrictMode>
+);
